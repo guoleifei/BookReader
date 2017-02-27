@@ -615,7 +615,9 @@ public class PageFactory {
                 View.MeasureSpec.makeMeasureSpec(ScreenUtils.dpToPxInt(14), View.MeasureSpec.EXACTLY));
         batteryView.layout(0, 0, batteryView.getMeasuredWidth(), batteryView.getMeasuredHeight());
         batteryView.buildDrawingCache();
-        batteryBitmap = batteryView.getDrawingCache();
+        batteryBitmap = Bitmap.createBitmap(batteryView.getDrawingCache());
+        batteryView.setDrawingCacheEnabled(false);
+        batteryView.destroyDrawingCache();
     }
 
     public void setBattery(int battery) {
