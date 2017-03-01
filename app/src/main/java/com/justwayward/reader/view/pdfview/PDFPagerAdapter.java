@@ -74,6 +74,11 @@ public class PDFPagerAdapter extends BasePDFPagerAdapter
                     pageClickListener.onPageTap(view, x, y);
                 }
             }
+
+            @Override
+            public void onOutsidePhotoTap() {
+
+            }
         });
         attacher.update();
         container.addView(v, 0);
