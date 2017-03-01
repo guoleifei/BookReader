@@ -15,60 +15,67 @@
  */
 package com.justwayward.reader.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.TextView;
 
 import com.justwayward.reader.R;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends Activity {
 
     @BindView(R.id.tvSkip)
     TextView tvSkip;
 
-    private boolean flag = false;
-    private Runnable runnable;
+    private Subscription sub;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
+        sub = Observable.interval(1,1, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .take(3)
+                .map(new Func1<Long, Long>() {
+                    @Override
+                    public Long call(Long aLong) {
+                        return (2 - aLong);
+                    }
+                }).subscribe(new Action1<Long>() {
+                    @Override
+                    public void call(Long aLong) {
+                        tvSkip.setText("跳过(" + aLong + ")");
+                        if (aLong == 0) {
+                            goHome();
+                        }
 
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                goHome();
-            }
-        };
-
-        tvSkip.postDelayed(runnable, 2000);
-
-        tvSkip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                goHome();
-            }
-        });
+                    }
+                });
     }
 
-    private synchronized void goHome() {
-        if (!flag) {
-            flag = true;
-            startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            finish();
-        }
+    private void goHome() {
+        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+        finish();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        flag = true;
-        tvSkip.removeCallbacks(runnable);
+        if (sub != null && !sub.isUnsubscribed()) {
+            sub.unsubscribe();
+        }
     }
 }
