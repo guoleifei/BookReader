@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -45,7 +46,7 @@ public class SplashActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
-        sub = Observable.interval(1,1, TimeUnit.SECONDS)
+        sub = Observable.interval(1, 1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .take(3)
@@ -57,6 +58,9 @@ public class SplashActivity extends Activity {
                 }).subscribe(new Action1<Long>() {
                     @Override
                     public void call(Long aLong) {
+                        if (SplashActivity.this.isFinishing() && SplashActivity.this.isDestroyed()) {
+                            return;
+                        }
                         tvSkip.setText("跳过(" + aLong + ")");
                         if (aLong == 0) {
                             goHome();
@@ -77,5 +81,10 @@ public class SplashActivity extends Activity {
         if (sub != null && !sub.isUnsubscribed()) {
             sub.unsubscribe();
         }
+    }
+
+    @OnClick(R.id.tvSkip)
+    public void onClick() {
+        goHome();
     }
 }

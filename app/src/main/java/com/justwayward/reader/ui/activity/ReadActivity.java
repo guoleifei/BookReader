@@ -316,10 +316,13 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View 
             gone(mTvBookReadCommunity, mTvBookReadChangeSource, mTvBookReadDownload);
             return;
         }
+        //**获取所有章节
         mPresenter.getBookMixAToc(bookId, "chapters");
     }
 
-
+    /**
+     * 初始化章节列表
+     */
     private void initTocList() {
         mTocListAdapter = new TocListAdapter(this, mChapterList, bookId, currentChapter);
         mTocListPopupWindow = new ListPopupWindow(this);
@@ -773,7 +776,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case 1:
-                if(resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     BookSource bookSource = (BookSource) data.getSerializableExtra("source");
                     bookId = bookSource._id;
                 }

@@ -154,6 +154,11 @@ public class RecommendFragment extends BaseRVFragment<RecommendPresenter, Recomm
         mRecyclerView.setTipViewText(progress.message);
     }
 
+    /**
+     * 列表单击事件
+     *
+     * @param position
+     */
     @Override
     public void onItemClick(int position) {
         if (isVisible(llBatchManagement)) //批量管理时，屏蔽点击事件
@@ -161,6 +166,12 @@ public class RecommendFragment extends BaseRVFragment<RecommendPresenter, Recomm
         ReadActivity.startActivity(activity, mAdapter.getItem(position), mAdapter.getItem(position).isFromSD);
     }
 
+    /**
+     * 列表长按事件
+     *
+     * @param position
+     * @return
+     */
     @Override
     public boolean onItemLongClick(int position) {
         //批量管理时，屏蔽长按事件
