@@ -27,6 +27,7 @@ import com.justwayward.reader.bean.BookMixAToc;
 import com.justwayward.reader.bean.BookReview;
 import com.justwayward.reader.bean.BookReviewList;
 import com.justwayward.reader.bean.BookSource;
+import com.justwayward.reader.bean.BookUpdate;
 import com.justwayward.reader.bean.BooksByCats;
 import com.justwayward.reader.bean.BooksByTag;
 import com.justwayward.reader.bean.CategoryList;
@@ -45,6 +46,7 @@ import com.justwayward.reader.bean.SearchDetail;
 import com.justwayward.reader.bean.user.Login;
 import com.justwayward.reader.bean.user.LoginReq;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
@@ -80,6 +82,10 @@ public class BookApi {
         if (instance == null)
             instance = new BookApi(okHttpClient);
         return instance;
+    }
+
+    public Observable<ArrayList<BookUpdate>> getUpdateList(String view, String ids) {
+        return service.getUpdateList(view, ids);
     }
 
     public Observable<Recommend> getRecommend(String gender) {

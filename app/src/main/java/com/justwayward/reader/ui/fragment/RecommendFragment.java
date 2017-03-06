@@ -31,6 +31,7 @@ import android.widget.TextView;
 import com.justwayward.reader.R;
 import com.justwayward.reader.base.BaseRVFragment;
 import com.justwayward.reader.bean.BookMixAToc;
+import com.justwayward.reader.bean.BookUpdate;
 import com.justwayward.reader.bean.Recommend;
 import com.justwayward.reader.bean.support.DownloadMessage;
 import com.justwayward.reader.bean.support.DownloadProgress;
@@ -138,6 +139,7 @@ public class RecommendFragment extends BaseRVFragment<RecommendPresenter, Recomm
         DownloadBookService.post(new DownloadQueue(bookId, list, 1, list.size()));
         dismissDialog();
     }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void downloadMessage(final DownloadMessage msg) {
@@ -362,12 +364,47 @@ public class RecommendFragment extends BaseRVFragment<RecommendPresenter, Recomm
         super.onRefresh();
         gone(llBatchManagement);
         List<Recommend.RecommendBooks> data = CollectionsManager.getInstance().getCollectionListBySort();
+        if (null != data) {
+            String ids = "";
+            for (Recommend.RecommendBooks books : data) {
+                ids = ids + books._id + ",";
+            }
+            if (!"".equals(ids)) {
+                mPresenter.getUpdate(ids);
+            }
+        }
         mAdapter.clear();
         mAdapter.addAll(data);
         //不加下面这句代码会导致，添加本地书籍的时候，部分书籍添加后直接崩溃
         //报错：Scrapped or attached views may not be recycled. isScrap:false isAttached:true
         mAdapter.notifyDataSetChanged();
         mRecyclerView.setRefreshing(false);
+    }
+
+    @Override
+    public void setUpdate(ArrayList<BookUpdate> list) {
+        if (null == list || list.isEmpty()) {
+            return;
+        }
+        if (null != mAdapter && mAdapter.getAllData() != null) {
+            List<Recommend.RecommendBooks> data = mAdapter.getAllData();
+            for (Recommend.RecommendBooks recommendBook : data) {
+                if (recommendBook.isFromSD) {
+                    continue;
+                }
+                for (BookUpdate bookUpdate : list) {
+                    if (recommendBook._id.equals(bookUpdate.get_id()) && recommendBook.chaptersCount < bookUpdate.getChaptersCount()) {
+                        recommendBook.lastChapter = bookUpdate.getLastChapter();
+                        recommendBook.chaptersCount = bookUpdate.getChaptersCount();
+                        recommendBook.updated = bookUpdate.getUpdated();
+                        break;
+                    }
+                }
+            }
+
+            CollectionsManager.getInstance().putCollectionList(data);
+        }
+        mAdapter.notifyDataSetChanged();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

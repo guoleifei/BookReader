@@ -17,8 +17,10 @@ package com.justwayward.reader.ui.contract;
 
 import com.justwayward.reader.base.BaseContract;
 import com.justwayward.reader.bean.BookMixAToc;
+import com.justwayward.reader.bean.BookUpdate;
 import com.justwayward.reader.bean.Recommend;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,11 +33,15 @@ public interface RecommendContract {
         void showRecommendList(List<Recommend.RecommendBooks> list);
 
         void showBookToc(String bookId, List<BookMixAToc.mixToc.Chapters> list);
+
+        void setUpdate(ArrayList<BookUpdate> list);
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {
 
         void getRecommendList();
+
+        void getUpdate(String ids);
     }
 
 }

@@ -26,6 +26,7 @@ import com.justwayward.reader.bean.BookRead;
 import com.justwayward.reader.bean.BookReview;
 import com.justwayward.reader.bean.BookReviewList;
 import com.justwayward.reader.bean.BookSource;
+import com.justwayward.reader.bean.BookUpdate;
 import com.justwayward.reader.bean.BooksByCats;
 import com.justwayward.reader.bean.BooksByTag;
 import com.justwayward.reader.bean.CategoryList;
@@ -47,6 +48,7 @@ import com.justwayward.reader.bean.RecommendBookList;
 import com.justwayward.reader.bean.SearchDetail;
 import com.justwayward.reader.bean.user.LoginReq;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.http.Body;
@@ -106,6 +108,17 @@ public interface BookApiService {
 
     @GET("/book/hot-word")
     Observable<HotWord> getHotWord();
+
+    /**
+     * 获取列表书籍是否更新 可能还有其他作用
+     * @param view updated为更新
+     * @param ids 书籍id 用逗号隔开
+     * @return
+     */
+    @GET("/book")
+    Observable<ArrayList<BookUpdate>> getUpdateList(@Query("view") String view,@Query("id") String ids);
+
+
 
     /**
      * 关键字自动补全

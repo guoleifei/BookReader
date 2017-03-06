@@ -20,6 +20,7 @@ import android.content.Context;
 import com.justwayward.reader.api.BookApi;
 import com.justwayward.reader.base.RxPresenter;
 import com.justwayward.reader.bean.BookMixAToc;
+import com.justwayward.reader.bean.BookUpdate;
 import com.justwayward.reader.bean.Recommend;
 import com.justwayward.reader.manager.SettingManager;
 import com.justwayward.reader.ui.contract.RecommendContract;
@@ -28,12 +29,14 @@ import com.justwayward.reader.utils.LogUtils;
 import com.justwayward.reader.utils.RxUtil;
 import com.justwayward.reader.utils.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import rx.Observable;
 import rx.Observer;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -86,6 +89,28 @@ public class RecommendPresenter extends RxPresenter<RecommendContract.View>
                     }
                 });
         addSubscrebe(rxSubscription);
+    }
+
+    @Override
+    public void getUpdate(String ids) {
+        bookApi.getUpdateList("updated", ids).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<ArrayList<BookUpdate>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(ArrayList<BookUpdate> list) {
+                        mView.setUpdate(list);
+                    }
+                });
     }
 
     public void getTocList(final String bookId) {
