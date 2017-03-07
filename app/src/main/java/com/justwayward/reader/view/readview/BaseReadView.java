@@ -18,16 +18,17 @@ package com.justwayward.reader.view.readview;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.PointF;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Scroller;
 
 import com.justwayward.reader.bean.BookMixAToc;
 import com.justwayward.reader.manager.SettingManager;
 import com.justwayward.reader.manager.ThemeManager;
 import com.justwayward.reader.utils.LogUtils;
-import com.justwayward.reader.utils.ScreenUtils;
 import com.justwayward.reader.utils.ToastUtils;
 
 import java.util.List;
@@ -61,11 +62,8 @@ public abstract class BaseReadView extends View {
         this.listener = listener;
         this.bookId = bookId;
 
-        mScreenWidth = ScreenUtils.getScreenWidth();
-        mScreenHeight = ScreenUtils.getScreenHeight();
-
-        mCurPageBitmap = Bitmap.createBitmap(mScreenWidth, mScreenHeight, Bitmap.Config.ARGB_8888);
-        mNextPageBitmap = Bitmap.createBitmap(mScreenWidth, mScreenHeight, Bitmap.Config.ARGB_8888);
+        mCurPageBitmap = Bitmap.createBitmap(mScreenWidth, mScreenHeight, Bitmap.Config.RGB_565);
+        mNextPageBitmap = Bitmap.createBitmap(mScreenWidth, mScreenHeight, Bitmap.Config.RGB_565);
         mCurrentPageCanvas = new Canvas(mCurPageBitmap);
         mNextPageCanvas = new Canvas(mNextPageBitmap);
 

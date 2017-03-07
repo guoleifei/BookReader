@@ -67,7 +67,7 @@ public class ThemeManager {
     }
 
     public static Bitmap getThemeDrawable(int theme) {
-        Bitmap bmp = Bitmap.createBitmap(ScreenUtils.getScreenWidth(), ScreenUtils.getScreenHeight(), Bitmap.Config.ARGB_8888);
+        Bitmap bmp = Bitmap.createBitmap(ScreenUtils.getScreenWidth(), ScreenUtils.getScreenHeight(), Bitmap.Config.RGB_565);//TODO APGB8888 为了减小bitmap 换成不支持透明的格式
         switch (theme) {
             case NORMAL:
                 bmp.eraseColor(ContextCompat.getColor(AppUtils.getAppContext(), R.color.read_theme_white));
