@@ -71,6 +71,9 @@ public class SplashActivity extends Activity {
     }
 
     private void goHome() {
+        if (sub != null && !sub.isUnsubscribed()) {
+            sub.unsubscribe();
+        }
         startActivity(new Intent(SplashActivity.this, MainActivity.class));
         finish();
     }
