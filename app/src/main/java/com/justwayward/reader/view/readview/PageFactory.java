@@ -111,7 +111,6 @@ public class PageFactory {
     public PageFactory(Context context, String bookId, List<BookMixAToc.mixToc.Chapters> chaptersList) {
 
 
-
         this(context, ScreenUtils.getScreenWidth(), ScreenUtils.getScreenHeight(),
                 //SettingManager.getInstance().getReadFontSize(bookId),
                 SettingManager.getInstance().getReadFontSize(),
@@ -302,10 +301,12 @@ public class PageFactory {
         String strParagraph = "";
         Vector<String> lines = new Vector<>();
         int paraSpace = 0;
+        //计算页面的行数
         mPageLineCount = mVisibleHeight / (mFontSize + mLineSpace);
+        //如果行数小于总行数 尾页的位置小于总字节数则继续
         while ((lines.size() < mPageLineCount) && (curEndPos < mbBufferLen)) {
-            byte[] parabuffer = readParagraphForward(curEndPos);
-            curEndPos += parabuffer.length;
+            byte[] parabuffer = readParagraphForward(curEndPos);//下一段的内容
+            curEndPos += parabuffer.length;//更新读取的尾页位置
             try {
                 strParagraph = new String(parabuffer, charset);
             } catch (UnsupportedEncodingException e) {
@@ -315,7 +316,7 @@ public class PageFactory {
                     .replaceAll("\n", " "); // 段落中的换行符去掉，绘制的时候再换行
 
             while (strParagraph.length() > 0) {
-                int paintSize = mPaint.breakText(strParagraph, true, mVisibleWidth, null);
+                int paintSize = mPaint.breakText(strParagraph, true, mVisibleWidth, null);//测量当前的一行的数量返回字符数 即一行能有多少个字符
                 lines.add(strParagraph.substring(0, paintSize));
                 strParagraph = strParagraph.substring(paintSize);
                 if (lines.size() >= mPageLineCount) {
@@ -398,14 +399,15 @@ public class PageFactory {
     private byte[] readParagraphForward(int curEndPos) {
         byte b0;
         int i = curEndPos;
-        while (i < mbBufferLen) {
-            b0 = mbBuff.get(i++);
-            if (b0 == 0x0a) {
+        while (i < mbBufferLen) {//如果当前字节位置小于总字节数
+            b0 = mbBuff.get(i++);//当去当前索引位置的字节
+            if (b0 == 0x0a) {//如果当前是换行0x0a 代表/n换行
                 break;
             }
         }
-        int nParaSize = i - curEndPos;
+        int nParaSize = i - curEndPos;//获取这一段的长度，即最后索引位置
         byte[] buf = new byte[nParaSize];
+        //获取这一段的字符
         for (i = 0; i < nParaSize; i++) {
             buf[i] = mbBuff.get(curEndPos + i);
         }
