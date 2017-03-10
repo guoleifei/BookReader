@@ -32,6 +32,7 @@ import com.justwayward.reader.utils.SharedPreferencesUtil;
 import com.sinovoice.hcicloudsdk.api.HciCloudSys;
 import com.sinovoice.hcicloudsdk.common.HciErrorCode;
 import com.sinovoice.hcicloudsdk.common.InitParam;
+import com.squareup.leakcanary.LeakCanary;
 
 /**
  * @author yuyh.
@@ -45,12 +46,19 @@ public class ReaderApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
         sInstance = this;
         initCompoent();
         AppUtils.init(this);
         CrashHandler.getInstance().init(this);
         initPrefs();
         initNightMode();
+        LogUtils.init(this);
         //initHciCloud();
     }
 

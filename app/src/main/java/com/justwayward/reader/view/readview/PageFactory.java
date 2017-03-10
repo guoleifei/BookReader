@@ -29,7 +29,6 @@ import android.widget.ProgressBar;
 import com.justwayward.reader.R;
 import com.justwayward.reader.bean.BookMixAToc;
 import com.justwayward.reader.manager.SettingManager;
-import com.justwayward.reader.utils.AppUtils;
 import com.justwayward.reader.utils.FileUtils;
 import com.justwayward.reader.utils.LogUtils;
 import com.justwayward.reader.utils.ScreenUtils;
@@ -138,7 +137,7 @@ public class PageFactory {
         mPaint.setColor(Color.BLACK);
         mTitlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         mTitlePaint.setTextSize(mNumFontSize);
-        mTitlePaint.setColor(ContextCompat.getColor(AppUtils.getAppContext(), R.color.chapter_title_day));
+        mTitlePaint.setColor(ContextCompat.getColor(context, R.color.chapter_title_day));
         timeLen = (int) mTitlePaint.measureText("00:00");
         percentLen = (int) mTitlePaint.measureText("00.00%");
         // Typeface typeface = Typeface.createFromAsset(context.getAssets(),"fonts/FZBYSK.TTF");
@@ -317,14 +316,14 @@ public class PageFactory {
 
             while (strParagraph.length() > 0) {
                 int paintSize = mPaint.breakText(strParagraph, true, mVisibleWidth, null);//测量当前的一行的数量返回字符数 即一行能有多少个字符
-                lines.add(strParagraph.substring(0, paintSize));
-                strParagraph = strParagraph.substring(paintSize);
+                lines.add(strParagraph.substring(0, paintSize));//将当前行的内容加入lines
+                strParagraph = strParagraph.substring(paintSize);//截取字符串去掉已经加入lines的
                 if (lines.size() >= mPageLineCount) {
                     break;
                 }
             }
-            lines.set(lines.size() - 1, lines.get(lines.size() - 1) + "@");
-            if (strParagraph.length() != 0) {
+            lines.set(lines.size() - 1, lines.get(lines.size() - 1) + "@");//给最后一个元素加入一个@标记
+            if (strParagraph.length() != 0) {//如果当前的段落还有剩余字符 则将剩余字符数从当前的尾页位置减去
                 try {
                     curEndPos -= (strParagraph).getBytes(charset).length;
                 } catch (UnsupportedEncodingException e) {
