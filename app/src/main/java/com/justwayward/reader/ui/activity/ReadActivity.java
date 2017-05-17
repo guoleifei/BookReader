@@ -78,7 +78,6 @@ import com.justwayward.reader.utils.ToastUtils;
 import com.justwayward.reader.view.readview.BaseReadView;
 import com.justwayward.reader.view.readview.OnReadStateChangeListener;
 import com.justwayward.reader.view.readview.OverlappedWidget;
-import com.justwayward.reader.view.readview.PageWidget;
 import com.sinovoice.hcicloudsdk.android.tts.player.TTSPlayer;
 import com.sinovoice.hcicloudsdk.common.tts.TtsConfig;
 import com.sinovoice.hcicloudsdk.player.TTSCommonPlayer;
@@ -208,7 +207,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View 
     private Recommend.RecommendBooks recommendBooks;
     private String bookId;
 
-    private boolean isAutoLightness = false; // 记录其他页面是否自动调整亮度
+    private boolean isAutoLightness = true; // 记录其他页面是否自动调整亮度
     private boolean isFromSD = false;
 
     //添加收藏需要，所以跳转的时候传递整个实体类
@@ -364,8 +363,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View 
 
         seekbarLightness.setMax(100);
         seekbarLightness.setOnSeekBarChangeListener(new SeekBarChangeListener());
-        seekbarLightness.setProgress(SettingManager.getInstance().getReadBrightness());
-        isAutoLightness = ScreenUtils.isAutoBrightness(this);
+        seekbarLightness.setProgress(SettingManager.getInstance().getReadBrightness());     
         if (SettingManager.getInstance().isAutoBrightness()) {
             startAutoLightness();
         } else {
@@ -394,7 +392,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View 
 
     private void initPagerWidget() {
         if (SharedPreferencesUtil.getInstance().getInt(Constant.FLIP_STYLE, 0) == 0) {
-            mPageWidget = new PageWidget(this, bookId, mChapterList, new ReadListener());
+            mPageWidget = new OverlappedWidget(this, bookId, mChapterList, new ReadListener());
         } else {
             mPageWidget = new OverlappedWidget(this, bookId, mChapterList, new ReadListener());
         }

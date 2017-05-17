@@ -123,7 +123,7 @@ public class PageFactory {
         mHeight = height;
         mFontSize = fontSize;
         mLineSpace = mFontSize / 5 * 2;
-        mNumFontSize = ScreenUtils.dpToPxInt(16);
+        mNumFontSize = ScreenUtils.dpToPxInt(12);
         marginWidth = ScreenUtils.dpToPxInt(15);
         marginHeight = ScreenUtils.dpToPxInt(15);
         mVisibleHeight = mHeight - marginHeight * 2 - mNumFontSize * 2 - mLineSpace * 2;
