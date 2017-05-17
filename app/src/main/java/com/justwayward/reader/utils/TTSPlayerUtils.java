@@ -15,7 +15,6 @@
  */
 package com.justwayward.reader.utils;
 
-import com.justwayward.reader.common.TTSEventProcess;
 import com.sinovoice.hcicloudsdk.android.tts.player.TTSPlayer;
 import com.sinovoice.hcicloudsdk.common.tts.TtsConfig;
 import com.sinovoice.hcicloudsdk.common.tts.TtsInitParam;
@@ -30,7 +29,13 @@ public class TTSPlayerUtils {
         TTSPlayer mTtsPlayer = new TTSPlayer();
         TtsInitParam ttsInitParam = new TtsInitParam();
         ttsInitParam.addParam(TtsInitParam.PARAM_KEY_FILE_FLAG, "none");
-        mTtsPlayer.init(ttsInitParam.getStringConfig(), new TTSEventProcess());
+        try {
+            //TODO 干掉初始化  有问题 有待解决
+//            mTtsPlayer.init(ttsInitParam.getStringConfig(), new TTSEventProcess());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+       
         return mTtsPlayer;
     }
 

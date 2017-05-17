@@ -91,21 +91,22 @@ public class OverlappedWidget extends BaseReadView {
     @Override
     protected void drawCurrentPageShadow(Canvas canvas) {
         canvas.save();
-        GradientDrawable shadow;
-        if (actiondownX > mScreenWidth >> 1) {
-            shadow = mBackShadowDrawableLR;
-            shadow.setBounds((int) (mScreenWidth + touch_down - 5), 0, (int) (mScreenWidth + touch_down + 5), mScreenHeight);
-
-        } else {
-            shadow = mBackShadowDrawableRL;
-            shadow.setBounds((int) (touch_down - 5), 0, (int) (touch_down + 5), mScreenHeight);
-        }
-        shadow.draw(canvas);
-        try {
-            canvas.restore();
-        } catch (Exception e) {
-
-        }
+        //TODO  阴影问题 会造成夜间模式 左侧和滑动的时候右侧 左侧 白边 暂时去掉
+//        GradientDrawable shadow;
+//        if (actiondownX > mScreenWidth >> 1) {
+//            shadow = mBackShadowDrawableLR;
+//            shadow.setBounds((int) (mScreenWidth + touch_down - 5), 0, (int) (mScreenWidth + touch_down + 5), mScreenHeight);
+//
+//        } else {
+//            shadow = mBackShadowDrawableRL;
+//            shadow.setBounds((int) (touch_down - 5), 0, (int) (touch_down + 5), mScreenHeight);
+//        }
+//        shadow.draw(canvas);
+//        try {
+//            canvas.restore();
+//        } catch (Exception e) {
+//
+//        }
     }
 
     @Override

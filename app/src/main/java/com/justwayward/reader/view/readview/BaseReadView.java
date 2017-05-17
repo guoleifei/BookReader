@@ -114,7 +114,7 @@ public abstract class BaseReadView extends View {
                 touch_down = 0;
                 pagefactory.onDraw(mCurrentPageCanvas);
                 if (actiondownX >= mScreenWidth / 3 && actiondownX <= mScreenWidth * 2 / 3
-                        && actiondownY >= mScreenHeight / 3 && actiondownY <= mScreenHeight * 2 / 3) {
+                        && actiondownY >= mScreenHeight / 4 && actiondownY <= mScreenHeight * 4 / 5) {
                     center = true;
                 } else {
                     center = false;
